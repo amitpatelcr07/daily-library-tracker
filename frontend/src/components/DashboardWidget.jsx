@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getStudents } from "../services/studentServices";
 import StudentForm from "../components/StudentForm.jsx"; // 👈 your form
-
+import { Link } from "react-router-dom";
 const Dashboard = () => {
   const [totalStudents, setTotalStudents] = useState(0);
   const [totalBooks, setTotalBooks] = useState(0);
@@ -64,12 +64,14 @@ const Dashboard = () => {
     <div className="p-6 space-y-6 relative">
       {/* Add Student Button */}
       <div className="flex justify-end">
-        <button
-          onClick={handleAddStudentClick}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-        >
-          + Add Student
-        </button>
+        <Link to='/studentsForm'>
+          <button
+            onClick={handleAddStudentClick}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          >
+            + Add Student
+          </button>
+        </Link>
       </div>
 
       {/* ✅ Stats */}
@@ -102,7 +104,7 @@ const Dashboard = () => {
               <li className="text-gray-500">No recent students found.</li>
             ) : (
               recentStudents.map((student, index) => (
-                <li key={index} className="border-b pb-2">
+                <li key={index} className="border-b pb-2 text-green-400">
                   {student.name} – Joined Recently
                 </li>
               ))

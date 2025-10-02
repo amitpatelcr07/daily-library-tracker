@@ -4,7 +4,14 @@ import Footer from "../components/common/Footer.jsx";
 import Sidebar from "../components/common/Sidebar.jsx";
 import Dashboard from "../components/DashboardWidget.jsx";
 
+import AppRoutes from "../routes/AppRoutes.jsx";
+
 const MainLayout = () => {
+  
+     
+
+
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
@@ -16,7 +23,7 @@ const MainLayout = () => {
 
         {/* Main Content */}
         <main className="flex-1 bg-gray-100 p-6">
-          <Dashboard />
+         <AppRoutes/>
         </main>
       </div>
       <Footer />

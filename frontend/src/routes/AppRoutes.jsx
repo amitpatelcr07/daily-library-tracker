@@ -1,13 +1,19 @@
-// src/routes/AboutRoute.jsx
 import React from "react";
-
-import { Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom"; // Import Routes and Route
 import Dashboard from "../components/DashboardWidget.jsx";
+import Student from "../pages/Student.jsx"; // Import Student page component
+import StudentForm from "../components/StudentForm.jsx";
 
-const  AppRoutes=()=> {
-  return <Route path="/" element={<Dashboard />} />;
-}
+const AppRoutes = () => {
+  return (
+    <Routes>
+      {/* Main layout with sidebar, header, and footer */}
+      <Route path="/" element={<Dashboard />} /> {/* Dashboard at root path */}
+      <Route path="/students" element={<Student />} />
+      <Route path="/studentsForm" element={<StudentForm />} />
+      {/* Student page at '/student' path */}
+    </Routes>
+  );
+};
 
 export default AppRoutes;
-
-
