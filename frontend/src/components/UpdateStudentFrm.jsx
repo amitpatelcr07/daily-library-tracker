@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createStudent } from "../services/studentServices";
-import { Link ,useNavigate} from "react-router-dom";
-const StudentForm = () => {
+import { Link ,useNavigate,useParams} from "react-router-dom";
+import { getStudentById,updateStudent } from "../services/studentServices"; // Import the function to get student by ID
+
+const UpdateStudentFrm = () => {
   const [submit,setSubmit]=useState(false);
- 
+  const { id } = useParams(); // Get the student ID from the URL
+  console.log("Editing student with ID:", id); // Log the ID to verify it's being captured
+
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,6 +19,36 @@ const StudentForm = () => {
     batchTime: "",
   });
   const navigate=useNavigate();
+
+  useEffect(() => { 
+    // Fetch the student data based on the ID and populate the form
+    const fetchStudentData = async () => {
+      try {
+        // Assuming you have a function to get student by ID
+        const studentData = await getStudentById(id); // Replace with your actual API call
+        setFormData({
+          name: studentData.name || "",
+          email: studentData.email || "", 
+          password: "", // Password is usually not fetched for security reasons
+          address: studentData.address || "",
+          fees: studentData.fees ? studentData.fees.toString() : "",
+          status: studentData.status || "active",
+          batchTime: studentData.batchTime || "",
+        });
+      } catch (error) {
+        console.error("Error fetching student data:", error);
+        alert("Failed to fetch student data.");
+      }
+    };
+
+    if (id) {
+      fetchStudentData();
+    } else {
+      console.log("No student ID provided in URL.");
+    }
+  }, [id]); // Run this effect when the component mounts or when the ID changes
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -31,19 +66,22 @@ const StudentForm = () => {
       fees: parseFloat(formData.fees),
     };
 
-    // Function to add a new student
-    const AddStudent = async () => {
+    // Function to Update  existing student
+    const updtStudent = async () => {
       try {
-        await createStudent(finalData); // Assuming API call
+       const data= await updateStudent(id, formData); // Assuming API call
+        console.log("Updated student data:", data);
+        setFormData(data)
+        alert("Student Updated successfully!");
         navigate("/");
-        alert("Student created successfully!");
+        
       } catch (error) {
         console.error("Error creating student:", error);
         alert("Failed to create student.");
       }
     };
 
-    AddStudent();
+    updtStudent();
     
     // Optionally reset form
     setFormData({
@@ -66,7 +104,7 @@ const StudentForm = () => {
         </button>
       </Link>
 
-      <h2 className="text-2xl font-bold text-center mb-6">Student Form</h2>
+      <h2 className="text-2xl font-bold text-center mb-6">Update Student Form</h2>
 
       <form className="space-y-6">
         {/* Name and Email */}
@@ -186,7 +224,7 @@ const StudentForm = () => {
             onClick={handleSubmit}
             className="md:w-1/2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
           >
-            Submit
+            Update Student
           </button>
         </div>
       </form>
@@ -194,4 +232,4 @@ const StudentForm = () => {
   );
 };
 
-export default StudentForm;
+export default UpdateStudentFrm;

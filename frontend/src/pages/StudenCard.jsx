@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { getStudents, deleteStudent } from "../services/studentServices"; // Assuming these API functions exist
+import {
+  getStudents,
+  deleteStudent,
+  getStudentById,
+} from "../services/studentServices"; // Assuming these API functions exist
+import { Link } from "react-router-dom";
 
 const StudenCard = () => {
   const [students, setStudents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [studentsPerPage] = useState(8); // Show 8 students per page
+  const [editStudentId, setEditStudentId] = useState(null);
 
   useEffect(() => {
     getStudents()
@@ -47,8 +53,28 @@ const StudenCard = () => {
   // Edit student (redirect to an edit page or open a modal)
   const handleEdit = (studentId) => {
     // You can implement an edit logic here, like opening a modal or navigating to an edit page
+    setEditStudentId(studentId);
     alert(`Edit student with ID: ${studentId}`);
+
   };
+  useEffect(() => {
+    if (editStudentId) {
+      // Logic to navigate to edit page or open modal can be added here
+      const fetchStudentForEdit = async () => {
+        try {
+          // Assuming getStudentById is a function that fetches student details by ID
+          const studentData = await getStudentById(editStudentId);
+          console.log("Student data for editing:", studentData);
+          // You can set this data to a state to pre-fill an edit form
+        } catch (error) {
+          console.error("Error fetching student for edit:", error);
+        }
+      };
+      fetchStudentForEdit();
+    } else {
+      console.log("No student selected for editing.");
+    }
+  }, [editStudentId]); 
 
   return (
     <div className="container mx-auto p-6">
@@ -97,12 +123,14 @@ const StudenCard = () => {
                   </td>
                   <td className="px-4 py-2 flex space-x-2">
                     {/* Edit Button */}
-                    <button
-                      onClick={() => handleEdit(student.id)}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600"
-                    >
-                      Edit
-                    </button>
+                    <Link to={`/students/${student._id}`}>
+                      <button
+                        onClick={() => handleEdit(student._id)}
+                        className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600"
+                      >
+                        Edit
+                      </button>
+                    </Link>
                     {/* Delete Button */}
                     <button
                       onClick={() => handleDelete(student.id)}
