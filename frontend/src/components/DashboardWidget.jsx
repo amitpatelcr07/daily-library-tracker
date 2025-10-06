@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getStudents } from "../services/studentServices";
 import StudentForm from "../components/StudentForm.jsx"; // 👈 your form
 import { Link } from "react-router-dom";
+import bookServices from "../services/bookServices.js";
 const Dashboard = () => {
   const [totalStudents, setTotalStudents] = useState(0);
   const [totalBooks, setTotalBooks] = useState(0);
+  const[bookData,setBookData]=useState([]); 
   const [booksIssued, setBooksIssued] = useState(0);
   const [overdueBooks, setOverdueBooks] = useState(0);
   const [recentStudents, setRecentStudents] = useState([]);
@@ -22,7 +24,12 @@ const Dashboard = () => {
         console.error("Error fetching students:", error);
       });
 
-    // Dummy books data
+    
+
+  
+  }, []);
+  
+  
     const dummyBooks = [
       {
         title: "JavaScript Essentials",
@@ -46,11 +53,30 @@ const Dashboard = () => {
       },
     ];
 
-    setTotalBooks(dummyBooks.length);
-    setBooksIssued(dummyBooks.filter((book) => book.isIssued).length);
-    setOverdueBooks(dummyBooks.filter((book) => book.isOverdue).length);
-    setRecentBooks(dummyBooks.slice(-3).reverse());
-  }, []);
+  // Dummy books data
+    useEffect(() => {     
+       const fetchBooks = async()=>{
+        try{
+          const data=await bookServices.getBooks();
+          console.log("Books data:",data);
+          setBookData(data);
+          setRecentBooks(data.slice(-3).reverse());
+          console.log("Recent Books:",data.slice(-3).reverse());
+          const issuedCount = data.filter((book) => book.isIssued).length;
+          setBooksIssued(issuedCount);              
+          setTotalBooks(data.length);
+         
+        }catch(error){
+          console.error("Error fetching books:",error);
+        }       
+        } 
+        fetchBooks(); 
+      
+                              
+
+
+    },[]);
+
 
   const handleAddStudentClick = () => {
     setShowStudentForm(true);
@@ -63,13 +89,21 @@ const Dashboard = () => {
   return (
     <div className="p-6 space-y-6 relative">
       {/* Add Student Button */}
-      <div className="flex justify-end">
-        <Link to='/studentsForm'>
+      <div className="flex justify-end gap-4">
+        {/* Add Student */}
+        <Link to="/studentsForm">
           <button
             onClick={handleAddStudentClick}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
             + Add Student
+          </button>
+        </Link>
+
+        {/* Add Book */}
+        <Link to="/addBooks">
+          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+            + Add Books
           </button>
         </Link>
       </div>
@@ -118,7 +152,9 @@ const Dashboard = () => {
           <ul className="space-y-2">
             {recentBooks.map((book, index) => (
               <li key={index} className="border-b pb-2">
-                {book.title} – {book.isIssued ? "Issued" : "Available"}
+                <span className="text-pink-500 font-medium">
+                  {book.title} – {book.isIssued ? "Issued" : "Available"}
+                </span>{" "}
               </li>
             ))}
           </ul>

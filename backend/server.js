@@ -3,8 +3,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import router from "./routes/studentRoutes.js";
+import studentRouter from "./routes/studentRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import bookRouter from "./routes/bookRoutes.js";
 
 dotenv.config();
 
@@ -22,8 +23,8 @@ app.use(bodyParser.json());
 
 // ✅ Then routes
 app.use("/api/auth", authRoutes);
-app.use("/api", router);
-
+app.use("/api", studentRouter);
+app.use("/api/books", bookRouter);
 
 const PORT = process.env.PORT || 7000;
 const MONGO_URL = process.env.MONGO_URL;

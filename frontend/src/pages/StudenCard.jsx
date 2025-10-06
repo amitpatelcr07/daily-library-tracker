@@ -132,12 +132,14 @@ const StudenCard = () => {
                       </button>
                     </Link>
                     {/* Delete Button */}
-                    <button
-                      onClick={() => handleDelete(student.id)}
-                      className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700"
-                    >
-                      Delete
-                    </button>
+                    <Link to={"/"}>
+                      <button
+                        onClick={() => handleDelete(student._id)}
+                        className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    </Link>
                   </td>
                 </tr>
               ))
