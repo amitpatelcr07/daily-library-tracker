@@ -14,14 +14,23 @@ const app = express();
 // ✅ Middleware first
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    methods: "GET,POST,PUT,DELETE",
+    origin: [
+      "http://localhost:5173", // local dev
+      "https://student-tracker.vercel.app", // deployed frontend
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
 app.use(bodyParser.json());
 
 // ✅ Then routes
+
+app.get("/", (req, res) => {
+  res.send("✅ Backend is working and connected successfully!");
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api", studentRouter);
 app.use("/api/books", bookRouter);
