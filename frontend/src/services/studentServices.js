@@ -2,7 +2,9 @@
 import axios from "axios";
 
 // Base URL for your API (assuming you have a backend)
-const BASE_URL = "http://localhost:7000/api/students";
+const BASE_URL =
+  "mongodb+srv://pamitvns99_db_user:Amit12345@cluster0.h2liryu.mongodb.net/studentDb/api/students";
+// const BASE_URL = "http://localhost:7000/api/students";
 
 // Get all students
 export const getStudents = async () => {

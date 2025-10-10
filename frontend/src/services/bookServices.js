@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:7000/api/books";
+const BASE_URL =
+  "mongodb+srv://pamitvns99_db_user:Amit12345@cluster0.h2liryu.mongodb.net/studentDb/api/books";
+// const BASE_URL = "http://localhost:7000/api/books";
 
 // Get all books  
  const getBooks = async () => {
